@@ -1,5 +1,4 @@
 import { useMemo, useState } from 'react'
-import { ShieldCheck } from 'lucide-react'
 import { demoCouriers } from '../data/demoCouriers'
 import { demoDeliveries } from '../data/demoDeliveries'
 import { demoRegions } from '../data/demoRegions'
@@ -10,15 +9,19 @@ import { calculateRiskScore } from '../engine/riskScoring'
 import { recommendRoute, scoreRoutes } from '../engine/routeScoring'
 import { generateRecommendations } from '../engine/scheduleRecommender'
 import { buildDashboardSummary } from '../engine/dashboardSummary'
-import { CORE_MESSAGE } from '../utils/constants'
+import { BeforeAfterImpact } from '../components/BeforeAfterImpact'
 import { CourierRiskOverview } from '../components/CourierRiskOverview'
 import { DemoScenarioSelector } from '../components/DemoScenarioSelector'
 import { DemoFlowPanel } from '../components/DemoFlowPanel'
 import { DataEvidencePanel } from '../components/DataEvidencePanel'
 import { DailySafetyReport } from '../components/DailySafetyReport'
+import { FleetKpiStrip } from '../components/FleetKpiStrip'
 import { ManagerDashboard } from '../components/ManagerDashboard'
+import { PriorityActionPanel } from '../components/PriorityActionPanel'
 import { RiskFactorList } from '../components/RiskFactorList'
+import { RiskScoreDial } from '../components/RiskScoreDial'
 import { RouteComparison } from '../components/RouteComparison'
+import { SafetyCommandHeader } from '../components/SafetyCommandHeader'
 import { SafetyAlert } from '../components/SafetyAlert'
 import { ScheduleRecommendation } from '../components/ScheduleRecommendation'
 import { SelectedCourierDetail } from '../components/SelectedCourierDetail'
@@ -71,24 +74,11 @@ function App() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f5f7f4]">
-      <header className="border-b border-stone-200 bg-white">
-        <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-4 px-4 py-5">
-          <div>
-            <div className="flex items-center gap-2 text-safe">
-              <ShieldCheck size={24} />
-              <span className="text-sm font-bold uppercase tracking-wide">SafeRoute AI</span>
-            </div>
-            <h1 className="mt-2 text-3xl font-black text-ink md:text-4xl">택배 기사 사고 위험 예측 및 배송 의사결정 지원 AI</h1>
-            <p className="mt-2 max-w-3xl text-sm leading-6 text-stone-600">{CORE_MESSAGE}</p>
-          </div>
-          <div className="rounded-lg border border-emerald-200 bg-emerald-50 px-4 py-3 text-sm font-semibold text-emerald-800">
-            배송 상황 → 위험도 예측 → 원인 설명 → 안전 경로 → 스케줄 조정 → 개선 효과
-          </div>
-        </div>
-      </header>
+    <main className="min-h-screen bg-appbg">
+      <SafetyCommandHeader scenario={selectedScenario} weather={weather} />
+      <FleetKpiStrip summary={summary} />
 
-      <div className="mx-auto grid max-w-7xl gap-4 px-4 py-5 xl:grid-cols-[320px_1fr]">
+      <div className="mx-auto grid max-w-7xl gap-4 px-4 pb-6 xl:grid-cols-[320px_minmax(0,1fr)_380px]">
         <aside className="space-y-4">
           <DemoScenarioSelector scenarios={demoScenarios} selectedScenarioId={selectedScenarioId} onSelect={handleScenarioSelect} />
           <CourierRiskOverview
@@ -101,43 +91,55 @@ function App() {
 
         <section className="space-y-4">
           <DemoFlowPanel isApplied={recommendationApplied} risk={selectedRisk} recommendation={recommendations[0]} />
-          <SelectedCourierDetail courier={selectedCourier} risk={selectedRisk} weather={weather} />
+          <div className="grid gap-4 lg:grid-cols-[180px_1fr]">
+            <RiskScoreDial score={selectedRisk.riskScore} level={selectedRisk.riskLevel} />
+            <SelectedCourierDetail courier={selectedCourier} risk={selectedRisk} weather={weather} />
+          </div>
           <SafetyAlert risk={selectedRisk} recommendation={recommendations[0]} />
 
-          <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-            <RiskFactorList factors={selectedRisk.factors} />
-            <RouteComparison routes={selectedRoutes} recommendedRoute={recommendedRoute} />
-          </div>
-
-          <div className="grid gap-4 lg:grid-cols-[1.1fr_0.9fr]">
-            <ScheduleRecommendation
-              recommendations={recommendations}
-              isApplied={recommendationApplied}
-              onApply={() => setRecommendationApplied(true)}
-            />
-            <SimulatedRiskMap regions={demoRegions} risks={risks} />
-          </div>
-
-          <div className="grid gap-4 lg:grid-cols-[1fr_1fr]">
-            <ManagerDashboard summary={summary} isApplied={recommendationApplied} />
-            <DailySafetyReport
-              courier={selectedCourier}
-              risk={selectedRisk}
-              recommendation={recommendations[0]}
-              weather={weather}
-              isApplied={recommendationApplied}
-            />
-          </div>
-
-          <DataEvidencePanel
-            courierCount={demoCouriers.length}
-            deliveryCount={demoDeliveries.length}
-            regionCount={demoRegions.length}
-            routeCount={demoRoutes.length}
-            weatherCount={demoWeather.length}
-          />
+          <RiskFactorList factors={selectedRisk.factors} />
+          <RouteComparison routes={selectedRoutes} recommendedRoute={recommendedRoute} />
         </section>
+
+        <aside className="space-y-4">
+          <PriorityActionPanel
+            courier={selectedCourier}
+            risk={selectedRisk}
+            recommendation={recommendations[0]}
+            recommendedRoute={recommendedRoute}
+            isApplied={recommendationApplied}
+            onApply={() => setRecommendationApplied(true)}
+          />
+          <BeforeAfterImpact recommendation={recommendations[0]} summary={summary} isApplied={recommendationApplied} />
+          <ScheduleRecommendation
+            recommendations={recommendations}
+            isApplied={recommendationApplied}
+            onApply={() => setRecommendationApplied(true)}
+          />
+          <SimulatedRiskMap regions={demoRegions} risks={risks} />
+        </aside>
       </div>
+
+      <section className="mx-auto grid max-w-7xl gap-4 px-4 pb-6 lg:grid-cols-[1fr_1fr]">
+        <ManagerDashboard summary={summary} isApplied={recommendationApplied} />
+        <DailySafetyReport
+          courier={selectedCourier}
+          risk={selectedRisk}
+          recommendation={recommendations[0]}
+          weather={weather}
+          isApplied={recommendationApplied}
+        />
+      </section>
+
+      <section className="mx-auto max-w-7xl px-4 pb-8">
+        <DataEvidencePanel
+          courierCount={demoCouriers.length}
+          deliveryCount={demoDeliveries.length}
+          regionCount={demoRegions.length}
+          routeCount={demoRoutes.length}
+          weatherCount={demoWeather.length}
+        />
+      </section>
     </main>
   )
 }

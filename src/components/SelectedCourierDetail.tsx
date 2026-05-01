@@ -23,7 +23,7 @@ export function SelectedCourierDetail({ courier, risk, weather }: Props) {
         <RiskPill level={risk.riskLevel} score={risk.riskScore} />
       </div>
 
-      <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
         <Metric icon={<PackageCheck size={18} />} label="남은 배송" value={`${courier.remainingDeliveries}건`} />
         <Metric icon={<Clock size={18} />} label="누적 근무" value={`${courier.workingHours}시간`} />
         <Metric icon={<Route size={18} />} label="총 이동거리" value={`${courier.totalDistanceKm}km`} />

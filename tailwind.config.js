@@ -4,11 +4,17 @@ export default {
   theme: {
     extend: {
       colors: {
-        safe: '#178a58',
-        caution: '#d89b00',
-        warning: '#e46f27',
-        danger: '#d73a31',
-        ink: '#17202a',
+        navy: '#0F172A',
+        slate: '#334155',
+        appbg: '#F8FAFC',
+        card: '#FFFFFF',
+        line: '#E2E8F0',
+        amber: '#F59E0B',
+        safe: '#10B981',
+        warning: '#F97316',
+        danger: '#EF4444',
+        info: '#3B82F6',
+        ink: '#0F172A',
       },
     },
   },

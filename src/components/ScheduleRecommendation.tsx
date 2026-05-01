@@ -1,5 +1,6 @@
-import { CheckCircle2 } from 'lucide-react'
+import { CheckCircle2, Clock, PackageCheck, Route, ShieldCheck } from 'lucide-react'
 import type { Recommendation } from '../engine/types'
+import { ControlSection } from './ControlSection'
 
 type Props = {
   recommendations: Recommendation[]
@@ -8,32 +9,41 @@ type Props = {
 }
 
 export function ScheduleRecommendation({ recommendations, isApplied, onApply }: Props) {
-  const primary = recommendations[0]
-
   return (
-    <section className="rounded-lg border border-stone-200 bg-white p-4 shadow-sm">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-lg font-bold text-ink">배송 스케줄 재조정 추천</h2>
+    <ControlSection
+      title="AI 조치 큐"
+      description="안전 조정 필요 항목을 우선순위에 따라 제안합니다."
+      icon={<ShieldCheck size={20} />}
+      action={
         <button
-          className="rounded-md bg-safe px-3 py-2 text-sm font-bold text-white shadow-sm transition hover:bg-emerald-700 disabled:bg-stone-300"
+          className="rounded-md bg-amber px-3 py-2 text-sm font-black text-navy shadow-sm transition hover:bg-yellow-400 disabled:bg-slate-200 disabled:text-slate-500"
           type="button"
           disabled={isApplied}
           onClick={onApply}
         >
-          {isApplied ? 'AI 추천 적용됨' : `AI 추천 적용 (${primary.expectedRiskBefore}점 → ${primary.expectedRiskAfter}점)`}
+          {isApplied ? '조정안 적용됨' : `조정안 적용`}
         </button>
-      </div>
+      }
+    >
       <div className="mt-3 space-y-3">
-        {recommendations.slice(0, 3).map((recommendation) => (
-          <article key={recommendation.id} className="rounded-md border border-stone-200 bg-stone-50 p-4">
+        {recommendations.slice(0, 3).map((recommendation, index) => (
+          <article key={recommendation.id} className={`rounded-md border p-4 ${index === 0 ? 'border-amber bg-amber/10' : 'border-line bg-white'}`}>
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <h3 className="font-bold text-ink">{recommendation.title}</h3>
-              <span className="rounded-md bg-white px-2 py-1 text-sm font-semibold text-safe">
+              <div className="flex items-center gap-2">
+                <span className="text-amber">{getRecommendationIcon(recommendation.type)}</span>
+                <h3 className="font-bold text-ink">{recommendation.title}</h3>
+              </div>
+              <span className="rounded-md bg-white px-2 py-1 text-sm font-black text-safe">
                 {recommendation.expectedRiskBefore}점 → {recommendation.expectedRiskAfter}점
               </span>
             </div>
-            <p className="mt-2 text-sm leading-6 text-stone-700">{recommendation.message}</p>
-            <ul className="mt-3 grid gap-2 text-sm text-stone-700">
+            {index === 0 ? (
+              <span className="mt-2 inline-flex rounded-md bg-navy px-2 py-1 text-xs font-bold text-white">
+                우선 적용 추천
+              </span>
+            ) : null}
+            <p className="mt-2 text-sm leading-6 text-slate-700">{recommendation.message}</p>
+            <ul className="mt-3 grid gap-2 text-sm text-slate-700">
               {recommendation.actions.map((action) => (
                 <li key={action} className="flex items-start gap-2">
                   <CheckCircle2 size={16} className="mt-0.5 shrink-0 text-safe" />
@@ -44,6 +54,13 @@ export function ScheduleRecommendation({ recommendations, isApplied, onApply }: 
           </article>
         ))}
       </div>
-    </section>
+    </ControlSection>
   )
+}
+
+function getRecommendationIcon(type: Recommendation['type']) {
+  if (type === 'redistribution') return <PackageCheck size={18} />
+  if (type === 'rest') return <Clock size={18} />
+  if (type === 'safe_route' || type === 'schedule_adjustment') return <Route size={18} />
+  return <ShieldCheck size={18} />
 }

@@ -1,0 +1,39 @@
+import { Database } from 'lucide-react'
+
+type Props = {
+  courierCount: number
+  deliveryCount: number
+  regionCount: number
+  routeCount: number
+  weatherCount: number
+}
+
+export function DataEvidencePanel({ courierCount, deliveryCount, regionCount, routeCount, weatherCount }: Props) {
+  const items = [
+    ['시뮬레이션 기사', `${courierCount}명`],
+    ['배송지 데이터', `${deliveryCount}건`],
+    ['지역 특성', `${regionCount}개 구역`],
+    ['경로 후보', `${routeCount}개`],
+    ['날씨 시나리오', `${weatherCount}개`],
+  ]
+
+  return (
+    <section className="rounded-lg border border-stone-200 bg-white p-4 shadow-sm">
+      <div className="flex items-center gap-2">
+        <Database size={20} className="text-safe" />
+        <h2 className="text-lg font-bold text-ink">시뮬레이션 데이터 근거</h2>
+      </div>
+      <p className="mt-2 text-sm leading-6 text-stone-600">
+        MVP는 실제 개인정보를 사용하지 않고, 공개 위험 요인에서 영감을 받은 구조화된 mock data로 판단 흐름을 검증합니다.
+      </p>
+      <div className="mt-3 grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+        {items.map(([label, value]) => (
+          <div key={label} className="rounded-md border border-stone-200 bg-stone-50 p-3">
+            <div className="text-xs font-semibold text-stone-500">{label}</div>
+            <div className="mt-1 text-lg font-bold text-ink">{value}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  )
+}

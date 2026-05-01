@@ -2,6 +2,9 @@
 
 SafeRoute AI는 택배 기사 사고 위험을 예측하고, 위험 원인을 설명하며, 안전 경로와 배송 스케줄 재조정을 추천하는 AI 의사결정 지원 MVP입니다.
 
+- GitHub: https://github.com/khi6174/saferoute-ai
+- Live Demo: https://saferoute-ai-seven.vercel.app
+
 핵심 메시지:
 
 > 우리는 배송을 더 빠르게 만드는 것이 아니라, 더 안전하게 만드는 AI를 만듭니다.

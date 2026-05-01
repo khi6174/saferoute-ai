@@ -23,3 +23,5 @@ screenshot-*.png
 *.njsproj
 *.sln
 *.sw?
+
+.vercel

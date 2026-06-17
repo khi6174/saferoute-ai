@@ -25,7 +25,7 @@ export function FleetKpiStrip({ summary }: Props) {
       tone: 'text-amber',
     },
     {
-      label: '예상 개선폭',
+      label: '예상 위험 감소',
       value: `-${summary.improvement}점`,
       icon: <ShieldCheck size={18} />,
       tone: 'text-safe',

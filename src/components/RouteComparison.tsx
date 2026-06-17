@@ -17,14 +17,14 @@ export function RouteComparison({ routes, recommendedRoute }: Props) {
 
   return (
     <ControlSection
-      title="AI 경로 판단"
-      description="최단 경로가 항상 최선이 아닙니다. 시간과 위험도 감소를 함께 비교합니다."
+      title="최단 경로 vs 안전 경로"
+      description="가장 빠른 경로가 항상 가장 안전한 선택은 아닙니다. 시간 증가와 위험 감소를 함께 비교합니다."
       icon={<ShieldCheck size={20} />}
     >
       <div className="mb-4 grid gap-3 rounded-md border border-line bg-slate-50 p-3 sm:grid-cols-3">
         <DecisionMetric label="추가 소요" value={`${Math.max(0, timeDelta)}분`} />
         <DecisionMetric label="위험도 감소" value={`-${Math.max(0, riskDelta)}점`} />
-        <DecisionMetric label="AI 판단" value={recommendedRoute.label} emphasis />
+        <DecisionMetric label="AI 권장" value={recommendedRoute.label} emphasis />
       </div>
 
       <div className="grid gap-3 md:grid-cols-2">
@@ -46,7 +46,9 @@ export function RouteComparison({ routes, recommendedRoute }: Props) {
                 <Timer size={15} />
                 {formatMinutes(route.estimatedMinutes)}
               </span>
-              <span className={route.riskScore >= 70 ? 'font-bold text-danger' : 'font-bold text-safe'}>위험도 {route.riskScore}점</span>
+              <span className={route.riskScore >= 70 ? 'font-bold text-danger' : 'font-bold text-safe'}>
+                위험도 {route.riskScore}점
+              </span>
               <span>거리 {route.distanceKm}km</span>
             </div>
             <p className="mt-3 text-sm leading-6 text-slate-700">{route.recommendationMessage}</p>

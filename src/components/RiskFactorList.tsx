@@ -14,7 +14,7 @@ const impactClass = {
 export function RiskFactorList({ factors }: Props) {
   return (
     <section className="rounded-lg border border-stone-200 bg-white p-4 shadow-sm">
-      <h2 className="text-lg font-bold text-ink">위험 원인 TOP 요소</h2>
+      <h2 className="text-lg font-bold text-ink">위험 원인 TOP 5</h2>
       <div className="mt-3 space-y-3">
         {factors.map((factor) => (
           <article key={factor.factor} className={`rounded-md border p-3 ${impactClass[factor.impact]}`}>

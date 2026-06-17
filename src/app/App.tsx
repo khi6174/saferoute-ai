@@ -90,7 +90,12 @@ function App() {
         </aside>
 
         <section className="space-y-4">
-          <DemoFlowPanel isApplied={recommendationApplied} risk={selectedRisk} recommendation={recommendations[0]} />
+          <DemoFlowPanel
+            courier={selectedCourier}
+            isApplied={recommendationApplied}
+            risk={selectedRisk}
+            recommendation={recommendations[0]}
+          />
           <div className="grid gap-4 lg:grid-cols-[180px_1fr]">
             <RiskScoreDial score={selectedRisk.riskScore} level={selectedRisk.riskLevel} />
             <SelectedCourierDetail courier={selectedCourier} risk={selectedRisk} weather={weather} />

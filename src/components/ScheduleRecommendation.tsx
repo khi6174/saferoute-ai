@@ -11,7 +11,7 @@ type Props = {
 export function ScheduleRecommendation({ recommendations, isApplied, onApply }: Props) {
   return (
     <ControlSection
-      title="AI 조치 큐"
+      title="AI 권장 조치 목록"
       description="안전 조정 필요 항목을 우선순위에 따라 제안합니다."
       icon={<ShieldCheck size={20} />}
       action={
@@ -21,7 +21,7 @@ export function ScheduleRecommendation({ recommendations, isApplied, onApply }: 
           disabled={isApplied}
           onClick={onApply}
         >
-          {isApplied ? '조정안 적용됨' : `조정안 적용`}
+          {isApplied ? '조정 적용됨' : '조정 적용'}
         </button>
       }
     >

@@ -1,4 +1,5 @@
 import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from 'recharts'
+import { RESPONSIBILITY_MESSAGE, SIMULATION_MESSAGE } from '../utils/constants'
 import { ControlSection } from './ControlSection'
 
 type Props = {
@@ -18,40 +19,50 @@ type Props = {
 
 export function ManagerDashboard({ summary, isApplied }: Props) {
   const chartData = [
-    { name: '조정 전', risk: summary.beforeRisk },
-    { name: '조정 후', risk: summary.afterRisk },
+    { name: '적용 전', risk: summary.beforeRisk },
+    { name: '적용 후 예상', risk: summary.afterRisk },
   ]
 
   return (
     <ControlSection
-      title="관리자 대시보드 요약"
-      description="Fleet 단위 안전 조정 효과를 확인합니다."
+      title="관리자 영향 요약"
+      description="선택 기사에 대한 AI 권장 조치가 운영 위험에 미치는 영향을 확인합니다."
       action={
         <span className={`rounded-md px-3 py-1 text-sm font-bold ${isApplied ? 'bg-amber text-navy' : 'bg-slate-100 text-slate-700'}`}>
-          {isApplied ? 'AI 조정안 적용 후' : 'AI 조정안 적용 전'}
+          {isApplied ? '권장안 검토 완료' : '관리자 확인 필요'}
         </span>
       }
     >
       <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
-        <DashboardMetric label="평균 위험도" value={`${summary.averageRisk}점`} />
-        <DashboardMetric label="고위험 기사" value={`${summary.highRiskCourierCount}명`} />
-        <DashboardMetric label="물량 분산" value={`${summary.redistributedPackages}건`} />
-        <DashboardMetric label="지연 안내" value={`${summary.delayedDeliveries}건`} />
+        <DashboardMetric label="Fleet 평균 위험도" value={`${summary.averageRisk}점`} />
+        <DashboardMetric label="지원 필요 기사" value={`${summary.highRiskCourierCount}명`} />
+        <DashboardMetric label="물량 분산 권장" value={`${summary.redistributedPackages}건`} />
+        <DashboardMetric label="지연 안내 권장" value={`${summary.delayedDeliveries}건`} />
       </div>
-      <div className="mt-4 h-48">
-        <ResponsiveContainer width="100%" height="100%">
-          <BarChart data={chartData} margin={{ left: -20, right: 8, top: 8, bottom: 0 }}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="name" />
-            <YAxis domain={[0, 100]} />
-            <Tooltip />
-            <Bar dataKey="risk" name="위험도" fill="#0F172A" radius={[4, 4, 0, 0]} />
-          </BarChart>
-        </ResponsiveContainer>
+
+      <div className="mt-4 grid gap-4 lg:grid-cols-[1fr_220px]">
+        <div className="h-48">
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={chartData} margin={{ left: -20, right: 8, top: 8, bottom: 0 }}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis domain={[0, 100]} />
+              <Tooltip />
+              <Bar dataKey="risk" name="위험도" fill="#0F172A" radius={[4, 4, 0, 0]} />
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div className="rounded-md border border-line bg-slate-50 p-3">
+          <div className="text-sm font-bold text-slate-500">예상 조정 효과</div>
+          <div className="mt-2 text-3xl font-black text-safe">-{summary.improvement}점</div>
+          <p className="mt-2 text-sm leading-6 text-slate-600">
+            선택 기사 위험도는 {summary.beforeRisk}점에서 {summary.afterRisk}점으로 낮아지는 것으로 시뮬레이션됩니다.
+          </p>
+        </div>
       </div>
+
       <p className={`mt-3 rounded-md p-3 text-sm leading-6 ${isApplied ? 'bg-amber/10 text-slate' : 'bg-slate-50 text-slate-700'}`}>
-        {isApplied ? 'AI 추천이 적용되어' : 'AI 추천 적용 시'} 선택 기사 위험도는 {summary.beforeRisk}점에서 {summary.afterRisk}점으로 낮아지는 시뮬레이션 결과입니다.
-        최종 운영 판단은 관리자와 기사 확인을 거쳐야 합니다.
+        {RESPONSIBILITY_MESSAGE} {SIMULATION_MESSAGE}
       </p>
     </ControlSection>
   )

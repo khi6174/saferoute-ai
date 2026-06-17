@@ -16,8 +16,8 @@ export function SafetyAlert({ risk, recommendation }: Props) {
         <div>
           <h2 className="text-lg font-bold text-ink">실시간 안전 알림</h2>
           <p className="mt-2 text-sm leading-6 text-slate-700">
-            위험도 {risk.riskScore}점: {primaryReason?.label} 요인이 크게 작용하고 있습니다.
-            권장 행동: {recommendation.title}을 적용해 예상 위험도를 {recommendation.expectedRiskAfter}점까지 낮추는 것을 권장합니다.
+            위험도 {risk.riskScore}점: {primaryReason?.label ?? '복합 위험 요인'}이 크게 작용하고 있습니다.
+            권장 행동은 {recommendation.title}이며, 적용 시 예상 위험도는 {recommendation.expectedRiskAfter}점입니다.
           </p>
         </div>
       </div>

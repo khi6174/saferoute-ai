@@ -14,10 +14,10 @@ export function SelectedCourierDetail({ courier, risk, weather }: Props) {
     <section className="rounded-lg border border-stone-200 bg-white p-5 shadow-sm">
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
-          <p className="text-sm font-semibold text-stone-500">선택한 기사 상세 정보</p>
+          <p className="text-sm font-semibold text-stone-500">선택 기사 상세 정보</p>
           <h2 className="mt-1 text-2xl font-bold text-ink">{courier.name}</h2>
           <p className="mt-2 text-sm text-stone-600">
-            SafeRoute AI는 기사 평가가 아니라 사고 예방과 물량 균형을 위한 의사결정 보조 시스템입니다.
+            SafeRoute AI는 기사 평가 도구가 아니라 사고 예방과 물량 균형을 위한 의사결정 보조 시스템입니다.
           </p>
         </div>
         <RiskPill level={risk.riskLevel} score={risk.riskScore} />

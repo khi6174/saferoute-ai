@@ -1,5 +1,6 @@
 import { BellRing, CheckCircle2, Route, UserCheck } from 'lucide-react'
 import type { Courier, Recommendation, RiskResult, RouteResult } from '../engine/types'
+import { RESPONSIBILITY_MESSAGE, SIMULATION_MESSAGE } from '../utils/constants'
 import { ControlSection } from './ControlSection'
 
 type Props = {
@@ -21,8 +22,8 @@ export function PriorityActionPanel({
 }: Props) {
   return (
     <ControlSection
-      title="AI 권장 조치"
-      description="현재 가장 먼저 확인해야 할 안전 조정안입니다."
+      title="지금 필요한 AI 권장 조치"
+      description="가장 먼저 확인해야 할 안전 조정안입니다."
       icon={<BellRing size={20} />}
       tone={risk.riskScore >= 80 ? 'danger' : 'amber'}
       action={
@@ -37,7 +38,7 @@ export function PriorityActionPanel({
           <div className="mt-1 flex flex-wrap items-center gap-2">
             <strong className="text-xl text-ink">{courier.name}</strong>
             <span className="rounded-md bg-red-100 px-2 py-1 text-sm font-bold text-danger">
-              고위험 상태 · {risk.riskScore}점
+              위험도 {risk.riskScore}점 · {risk.riskLevelLabel}
             </span>
           </div>
         </div>
@@ -56,7 +57,7 @@ export function PriorityActionPanel({
           <div className="flex items-start gap-2">
             <Route size={18} className="mt-0.5 text-info" />
             <div>
-              <p className="font-bold text-ink">안전 경로 추천</p>
+              <p className="font-bold text-ink">안전 경로 우선 검토</p>
               <p className="mt-1 text-sm leading-6 text-slate-600">
                 {recommendedRoute.label} 선택 시 경로 위험도는 {recommendedRoute.riskScore}점입니다.
               </p>
@@ -71,8 +72,13 @@ export function PriorityActionPanel({
           className="flex w-full items-center justify-center gap-2 rounded-md bg-amber px-4 py-3 text-sm font-black text-navy shadow-sm transition hover:bg-yellow-400 disabled:bg-slate-200 disabled:text-slate-500"
         >
           <CheckCircle2 size={18} />
-          {isApplied ? '관리자 조정안 적용됨' : `관리자 조정안 적용 (${recommendation.expectedRiskBefore}점 → ${recommendation.expectedRiskAfter}점)`}
+          {isApplied
+            ? '관리자 검토 완료'
+            : `권장안 시뮬레이션 적용 (${recommendation.expectedRiskBefore}점 → ${recommendation.expectedRiskAfter}점)`}
         </button>
+        <p className="text-xs leading-5 text-slate-500">
+          {RESPONSIBILITY_MESSAGE} {SIMULATION_MESSAGE}
+        </p>
       </div>
     </ControlSection>
   )

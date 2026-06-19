@@ -1,6 +1,7 @@
 import { CheckCircle2, Clock, PackageCheck, Route, ShieldCheck } from 'lucide-react'
 import type { Recommendation } from '../engine/types'
 import { ControlSection } from './ControlSection'
+import { ActionButton } from './ActionButton'
 
 type Props = {
   recommendations: Recommendation[]
@@ -15,14 +16,14 @@ export function ScheduleRecommendation({ recommendations, isApplied, onApply }: 
       description="안전 조정 필요 항목을 우선순위에 따라 제안합니다."
       icon={<ShieldCheck size={20} />}
       action={
-        <button
-          className="rounded-md bg-amber px-3 py-2 text-sm font-black text-navy shadow-sm transition hover:bg-yellow-400 disabled:bg-slate-200 disabled:text-slate-500"
-          type="button"
+        <ActionButton
+          size="compact"
+          variant="secondary"
           disabled={isApplied}
           onClick={onApply}
         >
           {isApplied ? '조정 적용됨' : '조정 적용'}
-        </button>
+        </ActionButton>
       }
     >
       <div className="mt-3 space-y-3">

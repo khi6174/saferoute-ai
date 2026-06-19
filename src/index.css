@@ -18,9 +18,15 @@ body {
   margin: 0;
   min-width: 320px;
   min-height: 100vh;
+  background: #f8fafc;
 }
 
 button,
 select {
   font: inherit;
+}
+
+::selection {
+  background: rgba(245, 158, 11, 0.28);
+  color: #0f172a;
 }

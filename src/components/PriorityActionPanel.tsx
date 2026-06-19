@@ -2,6 +2,7 @@ import { BellRing, CheckCircle2, Route, UserCheck } from 'lucide-react'
 import type { Courier, Recommendation, RiskResult, RouteResult } from '../engine/types'
 import { RESPONSIBILITY_MESSAGE, SIMULATION_MESSAGE } from '../utils/constants'
 import { ControlSection } from './ControlSection'
+import { ActionButton } from './ActionButton'
 
 type Props = {
   courier: Courier
@@ -65,17 +66,16 @@ export function PriorityActionPanel({
           </div>
         </div>
 
-        <button
-          type="button"
+        <ActionButton
           disabled={isApplied}
           onClick={onApply}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-amber px-4 py-3 text-sm font-black text-navy shadow-sm transition hover:bg-yellow-400 disabled:bg-slate-200 disabled:text-slate-500"
+          className="w-full"
+          icon={<CheckCircle2 size={18} />}
         >
-          <CheckCircle2 size={18} />
           {isApplied
             ? '관리자 검토 완료'
             : `권장안 시뮬레이션 적용 (${recommendation.expectedRiskBefore}점 → ${recommendation.expectedRiskAfter}점)`}
-        </button>
+        </ActionButton>
         <p className="text-xs leading-5 text-slate-500">
           {RESPONSIBILITY_MESSAGE} {SIMULATION_MESSAGE}
         </p>

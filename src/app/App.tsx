@@ -10,6 +10,7 @@ import { recommendRoute, scoreRoutes } from '../engine/routeScoring'
 import { generateRecommendations } from '../engine/scheduleRecommender'
 import { buildDashboardSummary } from '../engine/dashboardSummary'
 import { BeforeAfterImpact } from '../components/BeforeAfterImpact'
+import { ActionButton } from '../components/ActionButton'
 import { CourierRiskOverview } from '../components/CourierRiskOverview'
 import { DemoScenarioSelector } from '../components/DemoScenarioSelector'
 import { DemoFlowPanel } from '../components/DemoFlowPanel'
@@ -22,19 +23,12 @@ import { RiskFactorList } from '../components/RiskFactorList'
 import { RiskScoreDial } from '../components/RiskScoreDial'
 import { RouteComparison } from '../components/RouteComparison'
 import { SafetyCommandHeader } from '../components/SafetyCommandHeader'
+import { DashboardTabNavigation, type DashboardTab } from '../components/DashboardTabNavigation'
 import { SafetyAlert } from '../components/SafetyAlert'
 import { ScheduleRecommendation } from '../components/ScheduleRecommendation'
 import { SelectedCourierDetail } from '../components/SelectedCourierDetail'
 import { SimulatedRiskMap } from '../components/SimulatedRiskMap'
-
-type DashboardTab = 'control' | 'analysis' | 'recommendation' | 'manager'
-
-const DASHBOARD_TABS: { id: DashboardTab; label: string }[] = [
-  { id: 'control', label: '상황 관제' },
-  { id: 'analysis', label: '위험 분석' },
-  { id: 'recommendation', label: '권장 조치' },
-  { id: 'manager', label: '관리자 대시보드' },
-]
+import { ArrowRight } from 'lucide-react'
 
 function App() {
   const [selectedScenarioId, setSelectedScenarioId] = useState(demoScenarios[0].id)
@@ -85,24 +79,11 @@ function App() {
 
   return (
     <main className="min-h-screen bg-appbg">
-      <SafetyCommandHeader scenario={selectedScenario} weather={weather} />
+      <SafetyCommandHeader scenario={selectedScenario} weather={weather} summary={summary} />
       <FleetKpiStrip summary={summary} />
 
       <div className="mx-auto max-w-7xl px-4 pb-8">
-        <nav className="mb-4 grid gap-2 rounded-lg border border-line bg-white p-2 shadow-sm sm:grid-cols-4" aria-label="대시보드 탭">
-          {DASHBOARD_TABS.map((tab) => (
-            <button
-              key={tab.id}
-              type="button"
-              onClick={() => setActiveTab(tab.id)}
-              className={`rounded-md px-4 py-3 text-sm font-black transition ${
-                activeTab === tab.id ? 'bg-navy text-white shadow-sm' : 'text-slate-600 hover:bg-slate-100 hover:text-ink'
-              }`}
-            >
-              {tab.label}
-            </button>
-          ))}
-        </nav>
+        <DashboardTabNavigation activeTab={activeTab} onChange={setActiveTab} />
 
         {activeTab === 'control' && (
           <section className="space-y-4">
@@ -200,13 +181,9 @@ function App() {
 function NextStepButton({ label, onClick }: { label: string; onClick: () => void }) {
   return (
     <div className="flex justify-end">
-      <button
-        type="button"
-        onClick={onClick}
-        className="rounded-md bg-amber px-5 py-3 text-sm font-black text-navy shadow-sm transition hover:bg-yellow-400"
-      >
+      <ActionButton onClick={onClick} icon={<ArrowRight size={18} />}>
         {label}
-      </button>
+      </ActionButton>
     </div>
   )
 }
